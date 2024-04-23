@@ -13,7 +13,7 @@ function search(nick) {
 
 function searchPlayer() {
     const searchInput = document.getElementById("searchInput").value;
-    window.location.href = `${frontendRoute}p/?nick=${searchInput}`
+    window.location.href = `${frontendRoute}p?nick=${searchInput}`
     
 }
 function toggleDarkMode() {
