@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rooik.at</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="sidebar" class="sidebar">
+        <!-- <h2>Menu</h2> -->
+        <button class="collapse-btn" onclick="toggleSidebar()">☰</button>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Players</a></li>
+            <li><a href="#">Matches</a></li>
+            <li><a href="#">Leaderboard</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>rooik.at</h1>
+        <input type="text" id="searchInput" placeholder="Search players...">
+        <button onclick="searchPlayer()">Search</button>
+        <div id="searchResults"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    padding-top: 20px;
+}
+
+.sidebar h2 {
+    color: #fff;
+    padding-left: 20px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+}
+
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+input[type="text"], button {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;}
+
+input[type="text"] {
+    width: 200px;
+    border-radius: 2px;
+}
+
+button {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #005f6b;
+}
+
+.dark-mode {
+    background-color: #121212;
+    color: #fff;
+}
+
+/* Your existing CSS styles */
+
+.sidebar.collapsed {
+    width: 50px;
+}
+
+.sidebar.collapsed h2 {
+    display: none;
+}
+
+.sidebar.sidebar.collapsed button {
+    width: 50px;
+}
+
+.sidebar.sidebar button {
+    width: 50px;
+}
+/* .sidebar.collapsed .collapse-btn {
+    /* transform: rotate(90deg); */
+    /* width: 750x; Add this line */
+/* } */ 
+.sidebar.collapsed ul {
+    display: none;
+}
+
+
