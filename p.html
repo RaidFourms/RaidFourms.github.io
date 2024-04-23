@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<head>
+    <script>
+        console.log(document.URL);
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const nick = urlParams.get('nick')
+        console.log(nick);
+        document.write(nick);
+    </script>
+</head>
+<body>
+    <p>Test, check console</p>
+</body>

@@ -1,8 +1,8 @@
 const apiRoute = "https://rooik.at/v3/";
-const frontendRoute = "http://localhost:3000/";
+const frontendRoute = document.URL // "http://localhost:3000/";
 
 function request(path) {
-    return fetch(route + path)
+    return fetch(route + path)  
         .then((response) => response.json())
         .catch((error) => console.error(error));
 }
