@@ -1,8 +1,8 @@
 const apiRoute = "https://rooik.at/v3/";
-const frontendRoute = document.URL // "http://localhost:3000/";
+const frontendRoute = document.URL; // "http://localhost:3000/";
 
 function request(path) {
-    return fetch(route + path)  
+    return fetch(route + path)
         .then((response) => response.json())
         .catch((error) => console.error(error));
 }
@@ -13,14 +13,15 @@ function search(nick) {
 
 function searchPlayer() {
     const searchInput = document.getElementById("searchInput").value;
-    window.location.href = `${frontendRoute}p?nick=${searchInput}`
-    
+    window.location.href = `${frontendRoute}p?nick=${searchInput}`;
 }
 function toggleDarkMode() {
+    console.log("toggling dark mode");
     const body = document.body;
     body.classList.toggle("dark-mode");
 }
 function toggleSidebar() {
+    console.log("toggling sidebar");
     const sidebar = document.getElementById("sidebar");
     sidebar.classList.toggle("collapsed");
 }

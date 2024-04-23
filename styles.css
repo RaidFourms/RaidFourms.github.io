@@ -92,3 +92,15 @@ button:hover {
 }
 
 
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    padding-top: 20px;
+    transition: width 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    opacity: 1;
+}
+
