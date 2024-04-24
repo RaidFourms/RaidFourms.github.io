@@ -41,21 +41,24 @@ async function stats() {
             console.error(error);
         }
     }
-    try {
-        const response = await fetch(
-            `${CONST.API_URL}player/nick?nick=${nick}&format=json`
-        );
-        if (!response.ok) {
-            console.error("HTTP-Error: " + response.status);
-            document.getElementById("statsContainer").innerText =
-                "An error occurred. Please try again later.\n Response from server: " +
-                (await response.text());
+    else {
+        try {
+            const response = await fetch(
+                `${CONST.API_URL}player/nick?nick=${nick}&format=json`
+            );
+            if (!response.ok) {
+                console.error("HTTP-Error: " + response.status);
+                document.getElementById("statsContainer").innerText =
+                    "An error occurred. Please try again later.\n Response from server: " +
+                    (await response.text());
+            }
+            hideLoader();
+            return await response.json();
+        } catch (error) {
+            console.error(error);
         }
-        hideLoader();
-        return await response.json();
-    } catch (error) {
-        console.error(error);
     }
+
 }
 
 async function renderStats(stats) {
