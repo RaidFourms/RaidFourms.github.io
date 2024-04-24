@@ -1,4 +1,5 @@
 import CONST from "./const.js";
+//const API_URL = 'https://rooik.at/v3/';
 
 // Rest of the code...
 // console.log(document.URL);
@@ -6,14 +7,15 @@ console.log(CONST.API_URL);
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const nick = urlParams.get("nick");
-if (!nick) {
-    const userid = urlParams.get("userid");
-    
-}
+
+const playerid = urlParams.get("userid");
 // console.log(nick);
 
 document.getElementById("nickDisplay").innerText = "stats and stuff"; // nick;
 
+function hideLoader() {
+    document.getElementById("loader").style.display = "none";
+}
 function request(path) {
     return fetch(route + path)
         .then((response) => response.json())
@@ -21,6 +23,24 @@ function request(path) {
 }
 
 async function stats() {
+    if (playerid !== "") {
+        try {
+            const response = await fetch(
+                `${CONST.API_URL}player?playerid=${playerid}&format=json`
+            );
+            if (!response.ok) {
+                console.error("HTTP-Error: " + response.status);
+                document.getElementById("statsContainer").innerText =
+                    "An error occurred. Please try again later.\n Response from server: " +
+                    (await response.text());
+            }
+            hideLoader();
+
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+        }
+    }
     try {
         const response = await fetch(
             `${CONST.API_URL}player/nick?nick=${nick}&format=json`
@@ -30,9 +50,8 @@ async function stats() {
             document.getElementById("statsContainer").innerText =
                 "An error occurred. Please try again later.\n Response from server: " +
                 (await response.text());
-            document.getElementById("loader").style.display = "none";
         }
-
+        hideLoader();
         return await response.json();
     } catch (error) {
         console.error(error);
@@ -45,7 +64,6 @@ async function renderStats(stats) {
     statsContainer.innerHTML = `
         <h3>Nick: ${stats.base_info.nick}</h3>
         <h3>Level: ${stats.level_info.level}</h3>
-        <p>and other stuff...</p>
     `;
 }
 

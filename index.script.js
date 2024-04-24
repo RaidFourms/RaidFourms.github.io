@@ -1,5 +1,6 @@
 const apiRoute = "https://rooik.at/v3/";
 const frontendRoute = document.URL; // "http://localhost:3000/";
+// import CONST from "./const.js";
 
 function request(path) {
     return fetch(route + path)
@@ -13,6 +14,15 @@ function search(nick) {
 
 function searchPlayer() {
     const searchInput = document.getElementById("searchInput").value;
+
+    // if (document.getElementById("searchInput").value === "") {
+    //     return;
+    // }
+    if (/^[0-9]+$/.test(document.getElementById("searchInput").value)) {   
+        window.location.href = `${frontendRoute}p?userid=${searchInput}`;
+        return;
+    }
+
     window.location.href = `${frontendRoute}p?nick=${searchInput}`;
 }
 function toggleDarkMode() {
