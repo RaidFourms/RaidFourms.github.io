@@ -1,9 +1,18 @@
-console.log(document.URL);
+import CONST from "./const.js";
+
+// Rest of the code...
+// console.log(document.URL);
+console.log(CONST.API_URL);
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const nick = urlParams.get("nick");
-console.log(nick);
-document.getElementById("nickDisplay").innerText = "stats and stuff" // nick;
+if (!nick) {
+    const userid = urlParams.get("userid");
+    
+}
+// console.log(nick);
+
+document.getElementById("nickDisplay").innerText = "stats and stuff"; // nick;
 
 function request(path) {
     return fetch(route + path)
@@ -13,7 +22,17 @@ function request(path) {
 
 async function stats() {
     try {
-        const response = await fetch(`https://rooik.at/v3/player/nick?nick=${nick}&format=json`);
+        const response = await fetch(
+            `${CONST.API_URL}player/nick?nick=${nick}&format=json`
+        );
+        if (!response.ok) {
+            console.error("HTTP-Error: " + response.status);
+            document.getElementById("statsContainer").innerText =
+                "An error occurred. Please try again later.\n Response from server: " +
+                (await response.text());
+            document.getElementById("loader").style.display = "none";
+        }
+
         return await response.json();
     } catch (error) {
         console.error(error);
@@ -36,4 +55,3 @@ async function main() {
 }
 
 main();
-// function searchPlayer() {
