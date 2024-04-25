@@ -9,6 +9,8 @@ const urlParams = new URLSearchParams(queryString);
 const nick = urlParams.get("nick");
 
 const playerid = urlParams.get("userid");
+console.log(nick)
+console.log(playerid);
 // console.log(nick);
 
 document.getElementById("nickDisplay").innerText = "stats and stuff"; // nick;
@@ -22,11 +24,21 @@ function request(path) {
         .catch((error) => console.error(error));
 }
 
+async function downloadStats() {
+    const statsData = await stats();
+    const jsonContent = JSON.stringify(statsData);
+    const blob = new Blob([jsonContent], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const downloadLink = document.getElementById("downloadLink");
+    downloadLink.href = url;
+    downloadLink.download = "stats.json";
+}
+// lns 28 & 40 52
 async function stats() {
-    if (playerid !== "") {
+    if (playerid !== null) {
         try {
             const response = await fetch(
-                `${CONST.API_URL}player?playerid=${playerid}&format=json`
+                `${CONST.API_URL}player/?playerid=${playerid}&format=json`
             );
             if (!response.ok) {
                 console.error("HTTP-Error: " + response.status);
@@ -36,12 +48,13 @@ async function stats() {
             }
             hideLoader();
 
-            return await response.json();
+            const statsData = await response.json();
+            // await downloadStats(statsData); // Call downloadStats function with the statsData
+            return statsData;
         } catch (error) {
             console.error(error);
         }
-    }
-    else {
+    } else {
         try {
             const response = await fetch(
                 `${CONST.API_URL}player/nick?nick=${nick}&format=json`
@@ -53,12 +66,13 @@ async function stats() {
                     (await response.text());
             }
             hideLoader();
-            return await response.json();
+            const statsData = await response.json();
+            // await downloadStats(statsData); // Call downloadStats function with the statsData
+            return statsData;
         } catch (error) {
             console.error(error);
         }
     }
-
 }
 
 async function renderStats(stats) {
