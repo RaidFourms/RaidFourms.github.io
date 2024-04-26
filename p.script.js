@@ -39,7 +39,7 @@ async function stats() {
             if (!response.ok) {
                 console.error("HTTP-Error: " + response.status);
                 document.getElementById("statsContainer").innerText =
-                    "An error occurred. Check the console for details.\n Response from server: " +
+                    "An error occurred. Check the console for details.\n Response from server\n" +
                     (await response.text());
             }
             hideLoader();
@@ -58,7 +58,7 @@ async function stats() {
             if (!response.ok) {
                 console.error("HTTP-Error: " + response.status);
                 document.getElementById("statsContainer").innerText =
-                    "An error occurred. Please try again later.\n Response from server: " +
+                    "An error occurred. Please try again later.\n Response from server:\n" +
                     (await response.text());
             }
             hideLoader();
@@ -82,18 +82,15 @@ function generateStatsHTML(stats) {
     }
     let arcade_wl_ratio = calcPercentage(
         stats.common_statistic[0].pvp_played.victories,
-        stats.common_statistic[0].pvp_played.finished -
-            stats.common_statistic[0].pvp_played.victories
+        stats.common_statistic[0].pvp_played.finished
     );
     let realistic_wl_ratio = calcPercentage(
         stats.common_statistic[1].pvp_played.victories,
-        stats.common_statistic[1].pvp_played.finished -
-            stats.common_statistic[1].pvp_played.victories
+        stats.common_statistic[1].pvp_played.finished
     );
     let simulator_wl_ratio = calcPercentage(
         stats.common_statistic[2].pvp_played.victories,
-        stats.common_statistic[2].pvp_played.finished -
-            stats.common_statistic[2].pvp_played.victories
+        stats.common_statistic[2].pvp_played.finished
     );
 
     let arcade_kd_ratio =
@@ -155,6 +152,9 @@ async function renderStats(stats) {
     console.log(stats);
     const statsContainer = document.getElementById("statsContainer");
     statsContainer.innerHTML = generateStatsHTML(stats);
+    if (stats.base_info.nick !== undefined && stats.base_info.nick !== null) {
+        document.title = `Stats for ${stats.base_info.nick}`;
+    }
 }
 
 async function main() {
