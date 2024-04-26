@@ -90,3 +90,14 @@ button:hover {
     animation: l2 1s infinite linear;
   }
   @keyframes l2 {to{transform: rotate(1turn)}}
+
+
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    /* background-color: red; */
+    /* color: white; */
+    text-align: center;
+  }

@@ -43,7 +43,7 @@ async function stats() {
             if (!response.ok) {
                 console.error("HTTP-Error: " + response.status);
                 document.getElementById("statsContainer").innerText =
-                    "An error occurred. Please try again later.\n Response from server: " +
+                    "An error occurred. Check the console for details.\n Response from server: " +
                     (await response.text());
             }
             hideLoader();
@@ -71,6 +71,11 @@ async function stats() {
             return statsData;
         } catch (error) {
             console.error(error);
+            hideLoader();
+            // console.log(response.status);
+            document.getElementById("statsContainer").innerText =
+                    "An error occurred. Check the console for details. Error: " +
+                    error;
         }
     }
 }
