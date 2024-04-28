@@ -1,13 +1,11 @@
 import CONST from "./const.js";
+import { calculateXP } from "./exp.js";
 
-console.log(CONST.API_URL);
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const nick = urlParams.get("nick");
 
+const nick = urlParams.get("nick");
 const playerid = urlParams.get("userid");
-console.log(nick);
-console.log(playerid);
 
 document.getElementById("nickDisplay").innerText = "stats and stuff";
 
@@ -20,22 +18,15 @@ function request(path) {
         .catch((error) => console.error(error));
 }
 
-async function downloadStats() {
-    const statsData = await stats();
-    const jsonContent = JSON.stringify(statsData);
-    const blob = new Blob([jsonContent], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const downloadLink = document.getElementById("downloadLink");
-    downloadLink.href = url;
-    downloadLink.download = "stats.json";
-}
-
 async function stats() {
     if (playerid !== null) {
         try {
             const response = await fetch(
                 `${CONST.API_URL}player/?playerid=${playerid}&format=json`
-            );
+            ).then((b) => {
+                const objectURL = URL.createObjectURL(b);
+                dataDown.href = objectURL;
+            });
             if (!response.ok) {
                 console.error("HTTP-Error: " + response.status);
                 document.getElementById("statsContainer").innerText =
@@ -45,7 +36,13 @@ async function stats() {
             hideLoader();
 
             const statsData = await response.json();
-
+            const blob = new Blob([JSON.stringify(statsData, null, 4)], {
+                type: "application/json",
+            });
+            const objectURL = URL.createObjectURL(blob);
+            dataDown.href = objectURL;
+            dataDown.download = `${statsData.base_info.nick}.json`;
+            // blobify(await response.json());
             return statsData;
         } catch (error) {
             console.error(error);
@@ -63,6 +60,14 @@ async function stats() {
             }
             hideLoader();
             const statsData = await response.json();
+            // response.clone()
+            // blobify(await statsData);
+            const blob = new Blob([JSON.stringify(statsData, null, 4)], {
+                type: "application/json",
+            });
+            const objectURL = URL.createObjectURL(blob);
+            dataDown.href = objectURL;
+            dataDown.download = `${statsData.base_info.nick}.json`;
 
             return statsData;
         } catch (error) {
@@ -70,7 +75,7 @@ async function stats() {
             hideLoader();
 
             document.getElementById("statsContainer").innerText =
-                "An error occurred. Check the console for details. Error: " +
+                "An error occurred. Check the console for details. Error:\n" +
                 error;
         }
     }
@@ -78,8 +83,12 @@ async function stats() {
 
 function generateStatsHTML(stats) {
     function calcPercentage(a, b) {
-        return b !== 0 ? ((a / b) * 100).toFixed(2) : 0;
+        // Check if a or b is not a number, return 0 if so
+
+        // Check if b is 0 to avoid division by zero
+        return b !== 0 ? ((a / b) * 100).toFixed(2) : "0";
     }
+
     let arcade_wl_ratio = calcPercentage(
         stats.common_statistic[0].pvp_played.victories,
         stats.common_statistic[0].pvp_played.finished
@@ -105,12 +114,27 @@ function generateStatsHTML(stats) {
         stats.common_statistic[2].deaths !== 0
             ? stats.common_statistic[2].kills / stats.common_statistic[2].deaths
             : 0;
+
+    // console.log(xpCompletionPercentage);
+    // console.log(calculateXP(stats.level_info.level, stats.level_info.exp_left));
+    let exp = calculateXP(stats.level_info.level, stats.level_info.exp_left);
+    let maxExp = 1145101300;
+    /* ${calcPercentage(
+                exp[0],
+                maxExp
+            )}% */
+
     return `
         <h1>Stats for ${stats.base_info.nick}</h1>
         <p id="section-base_info">
             User ID: <strong>${stats.base_info.user_id}</strong><br>
             Squadron tag: <strong>${stats.base_info.clan_tag}</strong><br>
-            Current level: <strong>${stats.level_info.level}</strong> 
+            Current level: <strong>${stats.level_info.level}</strong><br>
+            Progress to next level: <strong>${calcPercentage(
+                stats.level_info.exp_has,
+                stats.level_info.exp_has + stats.level_info.exp_left
+            )}%</strong><br>
+            Progress to level 100: <strong>WIP</strong>
         </p>
         <p id="section-win_loss">
             <strong>W/L Ratios:</strong><br>
@@ -149,7 +173,7 @@ function generateStatsHTML(stats) {
 }
 
 async function renderStats(stats) {
-    console.log(stats);
+    // console.log(stats);
     const statsContainer = document.getElementById("statsContainer");
     statsContainer.innerHTML = generateStatsHTML(stats);
     if (stats.base_info.nick !== undefined && stats.base_info.nick !== null) {

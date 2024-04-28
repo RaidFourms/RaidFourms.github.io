@@ -79,7 +79,7 @@ button:hover {
     transition: width 0.2s ease-in-out, opacity 0.2s ease-in-out;
     opacity: 1;
 }
-/* HTML: <div class="loader"></div> */
+
 .loader {
     margin: auto;
     width: 50px;

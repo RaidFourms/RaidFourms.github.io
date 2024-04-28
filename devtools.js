@@ -52,10 +52,10 @@
         window.devtools = devtools;
     }
 })();
-console.log("is DevTools open?", window.devtools.open);
-console.log("and DevTools orientation?", window.devtools.orientation);
+// console.log("is DevTools open?", window.devtools.open);
+// console.log("and DevTools orientation?", window.devtools.orientation);
 
 window.addEventListener("devtoolschange", function (e) {
-    console.log("is DevTools open?", e.detail.open);
-    console.log("and DevTools orientation?", e.detail.orientation);
+    // console.log("is DevTools open?", e.detail.open);
+    // console.log("and DevTools orientation?", e.detail.orientation);
 });
