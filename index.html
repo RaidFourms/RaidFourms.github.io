@@ -6,13 +6,14 @@
         <title>rooik.at</title>
         <link rel="stylesheet" href="styles.css" />
         <meta charset="UTF-8" />
+        <script defer src="index.script.js"></script>
     </head>
     <body>
         <div id="sidebar" class="sidebar">
             <!-- <h2>Menu</h2> -->
             <button class="collapse-btn" onclick="toggleSidebar()">☰</button>
             <ul>
-                <li><a href="">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li><a href="#">Players</a></li>
                 <li><a href="#">Matches</a></li>
                 <li><a href="#">Leaderboard</a></li>
@@ -21,11 +22,15 @@
         <div class="content">
             <h1>rooik.at</h1>
             <input type="text" id="searchInput" placeholder="Enter nick..." />
+
             <button onclick="searchPlayer()">Search</button>
             <p>Enter in a War Thunder nickname or userid</p>
-            <p>Also the sidebar doesn't work...</p>
             <div id="searchResults"></div>
         </div>
-        <script src="index.script.js"></script>
+
+        <footer id="footer" class="footer">
+            <a>rooik.at</a>
+            <a id="maltol" href="mailto:admin@rooik.at">admin@rooik.at</a>
+        </footer>
     </body>
 </html>

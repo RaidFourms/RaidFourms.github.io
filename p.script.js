@@ -1,11 +1,14 @@
+"use scrict";
+
 import CONST from "./const.js";
 import { calculateXP } from "./exp.js";
-
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 
 const nick = urlParams.get("nick");
 const playerid = urlParams.get("userid");
+
+const logstyle = "color: #ff0000; font-weight: bold; font-size: 16px;";
 
 document.getElementById("nickDisplay").innerText = "stats and stuff";
 
@@ -17,16 +20,20 @@ function request(path) {
         .then((response) => response.json())
         .catch((error) => console.error(error));
 }
+/*
+function toggleSidebar() {
+    console.log("Toggling sidebar");
+    sidebar.classList.toggle("collapsed");
+}
 
+sidebar.addEventListener("click", toggleSidebar);
+*/
 async function stats() {
     if (playerid !== null) {
         try {
             const response = await fetch(
                 `${CONST.API_URL}player/?playerid=${playerid}&format=json`
-            ).then((b) => {
-                const objectURL = URL.createObjectURL(b);
-                dataDown.href = objectURL;
-            });
+            );
             if (!response.ok) {
                 console.error("HTTP-Error: " + response.status);
                 document.getElementById("statsContainer").innerText =
@@ -42,12 +49,11 @@ async function stats() {
             const objectURL = URL.createObjectURL(blob);
             dataDown.href = objectURL;
             dataDown.download = `${statsData.base_info.nick}.json`;
-            // blobify(await response.json());
             return statsData;
         } catch (error) {
             console.error(error);
         }
-    } else {
+    } else if (nick !== null) {
         try {
             const response = await fetch(
                 `${CONST.API_URL}player/nick?nick=${nick}&format=json`
@@ -77,52 +83,46 @@ async function stats() {
             document.getElementById("statsContainer").innerText =
                 "An error occurred. Check the console for details. Error:\n" +
                 error;
+            console.log(error, logstyle);
         }
+    } else {
+        console.log("%cNo player ID or nickname provided.", logstyle);
+        hideLoader();
+        document.getElementById("statsContainer").innerText =
+            "No player ID or nickname provided.";
     }
 }
 
 function generateStatsHTML(stats) {
     function calcPercentage(a, b) {
-        // Check if a or b is not a number, return 0 if so
-
-        // Check if b is 0 to avoid division by zero
         return b !== 0 ? ((a / b) * 100).toFixed(2) : "0";
     }
 
-    let arcade_wl_ratio = calcPercentage(
+    let arcWinLoss = calcPercentage(
         stats.common_statistic[0].pvp_played.victories,
         stats.common_statistic[0].pvp_played.finished
     );
-    let realistic_wl_ratio = calcPercentage(
+    let realWinLoss = calcPercentage(
         stats.common_statistic[1].pvp_played.victories,
         stats.common_statistic[1].pvp_played.finished
     );
-    let simulator_wl_ratio = calcPercentage(
+    let simWinLoss = calcPercentage(
         stats.common_statistic[2].pvp_played.victories,
         stats.common_statistic[2].pvp_played.finished
     );
 
-    let arcade_kd_ratio =
+    let arcKillDeath =
         stats.common_statistic[0].deaths !== 0
             ? stats.common_statistic[0].kills / stats.common_statistic[0].deaths
             : 0;
-    let realistic_kd_ratio =
+    let realKillDeath =
         stats.common_statistic[1].deaths !== 0
             ? stats.common_statistic[1].kills / stats.common_statistic[1].deaths
             : 0;
-    let simulator_kd_ratio =
+    let simKillDeath =
         stats.common_statistic[2].deaths !== 0
             ? stats.common_statistic[2].kills / stats.common_statistic[2].deaths
             : 0;
-
-    // console.log(xpCompletionPercentage);
-    // console.log(calculateXP(stats.level_info.level, stats.level_info.exp_left));
-    let exp = calculateXP(stats.level_info.level, stats.level_info.exp_left);
-    let maxExp = 1145101300;
-    /* ${calcPercentage(
-                exp[0],
-                maxExp
-            )}% */
 
     return `
         <h1>Stats for ${stats.base_info.nick}</h1>
@@ -138,19 +138,19 @@ function generateStatsHTML(stats) {
         </p>
         <p id="section-win_loss">
             <strong>W/L Ratios:</strong><br>
-            Arcade W/L: <strong>${arcade_wl_ratio}%</strong> (${
+            Arcade W/L: <strong>${arcWinLoss}%</strong> (${
         stats.common_statistic[0].pvp_played.victories
     }/${
         stats.common_statistic[0].pvp_played.finished -
         stats.common_statistic[0].pvp_played.victories
     })<br>
-            Realistic W/L: <strong>${realistic_wl_ratio}%</strong> (${
+            Realistic W/L: <strong>${realWinLoss}%</strong> (${
         stats.common_statistic[1].pvp_played.victories
     }/${
         stats.common_statistic[1].pvp_played.finished -
         stats.common_statistic[1].pvp_played.victories
     })<br>
-            Simulator W/L: <strong>${simulator_wl_ratio}%</strong> (${
+            Simulator W/L: <strong>${simWinLoss}%</strong> (${
         stats.common_statistic[2].pvp_played.victories
     }/${
         stats.common_statistic[2].pvp_played.finished -
@@ -159,13 +159,13 @@ function generateStatsHTML(stats) {
         </p>
         <p id="section-kill_death">
             <strong>K/D Ratios:</strong><br>
-            Arcade K/D: <strong>${arcade_kd_ratio.toFixed(2)}</strong> (${
+            Arcade K/D: <strong>${arcKillDeath.toFixed(2)}</strong> (${
         stats.common_statistic[0].kills
     }/${stats.common_statistic[0].deaths})<br>
-            Realistic K/D: <strong>${realistic_kd_ratio.toFixed(2)}</strong> (${
+            Realistic K/D: <strong>${realKillDeath.toFixed(2)}</strong> (${
         stats.common_statistic[1].kills
     }/${stats.common_statistic[1].deaths})<br>
-            Simulator K/D: <strong>${simulator_kd_ratio.toFixed(2)}</strong> (${
+            Simulator K/D: <strong>${simKillDeath.toFixed(2)}</strong> (${
         stats.common_statistic[2].kills
     }/${stats.common_statistic[2].deaths})
         </p>
@@ -173,7 +173,6 @@ function generateStatsHTML(stats) {
 }
 
 async function renderStats(stats) {
-    // console.log(stats);
     const statsContainer = document.getElementById("statsContainer");
     statsContainer.innerHTML = generateStatsHTML(stats);
     if (stats.base_info.nick !== undefined && stats.base_info.nick !== null) {

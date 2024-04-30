@@ -2,21 +2,31 @@
 <head>
     <script type="module" src="const.js"></script>
     <link rel="stylesheet" href="styles.css" />
-    <script type="module" defer src="p.script.js"></script>
+    <script type="module" src="p.script.js"></script>
     <script src="devtools.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>rooik.at</title>
 </head>
 <body>
+    <!-- <div id="sidebar" class="sidebar">
+        <button class="collapse-btn" onclick="toggleSidebar()">☰</button>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Players</a></li>
+            <li><a href="#">Matches</a></li>
+            <li><a href="#">Leaderboard</a></li>
+        </ul>
+    </div> -->
+    <!-- ^ doesn't work as it overlaps content -->
     <h1 id="nickDisplay" style="text-align: center"></h1>
     <div id="statsContainer"></div>
     <div class="loader" id="loader"></div>
     <a download="UNKNOWN.json" id="dataDown" href="#">Download JSON...</a>
-    <!-- <p style="font-size: 12px">
-        Other stats can be showed, just haven't bothered yet.
-    </p> -->
-    <!-- <p id="downbtn" href="" onclick="alert('WIP - For now go into console and copy the object')">Download JSON...</p> -->
-    <footer class="footer">
-        <p>rooik.at</p>
+
+    <footer id="footer" class="footer">
+        <a>rooik.at</a>
+        <a id="mailtolink" href="mailto:admin@rooik.at">admin@rooik.at</a>
     </footer>
 </body>

@@ -9,7 +9,13 @@ function request(path) {
 }
 
 function search(nick) {
-    return request(`player/search/?nick=${nick}`);
+    return request(`/player/search/?nick=${nick}`);
+}
+
+function renderPlayers(data) {
+    for (const player of data) {
+        console.log(player);
+    }
 }
 
 function searchPlayer() {
@@ -28,3 +34,25 @@ function toggleSidebar() {
     console.log("Toggling sidebar");
     sidebar.classList.toggle("collapsed");
 }
+/*
+searchInput.addEventListener("keyup", function (event) {
+    if (event.key === "Enter") {
+        searchPlayer();
+    }
+});
+var playerArr = [];
+
+searchInput.addEventListener("input", function (event) {
+    playerArr = [];
+    if (searchInput.value.trim().length > 0) {
+        console.log("Searching for", searchInput.value);
+        search(searchInput.value).then((data) => {
+            console.log(data);
+            for (p in data) {
+                playerArr.push(data[p]);
+            }
+        });
+    }
+});
+
+*/
