@@ -21,9 +21,9 @@ const vehicles = CONST.trans;
 
 function searchVehicle() {
     const inputValue = searchInput.value.trim();
-    const foundVehicle = vehicles.find(vehicle => vehicle.name.toLowerCase() === inputValue.toLowerCase());
-    if (foundVehicle) {
-        console.log(foundVehicle);
+    const vehicle = vehicles[inputValue]
+    if (vehicle) {
+        console.log(vehicle);
     } else {
         console.log("Vehicle not found");
     }
